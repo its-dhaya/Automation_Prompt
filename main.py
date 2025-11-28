@@ -1,28 +1,39 @@
-# from intent_classifier.classifier import IntentClassifier
+from intent_classifier.classifier import IntentClassifier
+from context_extractor.extractor import ContextExtractor
+import json
 
-# def main():
-#     clf = IntentClassifier()
+def main():
+    # Initialize modules
+    intent_clf = IntentClassifier()
+    context_ext = ContextExtractor()
 
-#     # Example natural-language input
-#     user_input = "schedule a meeting tomorrow at 3 PM for 1 hour"
+    # User input
+    user_input = "schedule a meeting tomorrow at 3 PM for 1 hour with John and Jane"
 
-#     result = clf.classify(user_input)
+    # Run Intent Classifier
+    intent_result = intent_clf.classify(user_input)
 
-#     print("\n--- Intent Classification Result ---")
-#     print(f"Intent: {result.intent}")
-#     print(f"Service: {result.service}")
-#     print(f"Confidence: {result.confidence}")
-#     print(f"Raw Text: {result.raw_text}")
-#     print("------------------------------------\n")
+    # Run Context Extractor
+    context_result = context_ext.extract(user_input)
 
-# if __name__ == "__main__":
-#     main()
-from  content_extractor.extractor import ContextExtractor
+    # Combine both
+    structured_output = {
+        "intent": intent_result.intent,
+        "service": intent_result.service,
+        "confidence": intent_result.confidence,
+        "context": {
+            "date": context_result.date,
+            "time": context_result.time,
+            "duration": context_result.duration,
+            "participants": context_result.participants,
+            "content": context_result.content
+        }
+    }
 
-ce = ContextExtractor()
+    # Print output
+    print("\n--- Full Structured Output ---")
+    print(json.dumps(structured_output, indent=4))
+    print("--------------------------------\n")
 
-user_input = "schedule a meeting tomorrow at 3 PM for 1 hour with John and Jane"
-
-ctx = ce.extract(user_input)
-
-print(ctx)
+if __name__ == "__main__":
+    main()
