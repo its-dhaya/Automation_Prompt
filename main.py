@@ -1,5 +1,6 @@
 from intent_classifier.classifier import IntentClassifier
 from context_extractor.extractor import ContextExtractor
+from system_message_builder.builder import SystemMessageBuilder
 import json
 
 def main():
@@ -30,10 +31,13 @@ def main():
         }
     }
 
-    # Print output
-    print("\n--- Full Structured Output ---")
-    print(json.dumps(structured_output, indent=4))
-    print("--------------------------------\n")
+    # Build full system message
+    builder = SystemMessageBuilder()
+    system_msg = builder.build(structured_output)
+
+    print("\n--- GENERATED FULL SYSTEM MESSAGE ---")
+    print(system_msg)
+    print("--------------------------------------------------")
 
 if __name__ == "__main__":
     main()
